@@ -90,7 +90,17 @@ $(function() {
             marker: {
             	enabled: false //toggles visibility of points
             }
-        }]
+        },
+	{
+	    name: 'Proofs',
+	    data: (function() {
+		var data = [[(new Date()).getTime(), player.proofs]];
+		return data;
+            })(),
+	    marker: {
+		enabled: false
+	    }
+	}]
     });
     
     var chart = $("#chartContainer").highcharts(),
