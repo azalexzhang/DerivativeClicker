@@ -24,10 +24,10 @@ $(function() {
                 load: function() {
                     // set up the updating of the chart each ten seconds
                     chartTimeoutRunner = (function(){
-			for(series in Highcharts.charts[0].series){
-	                        chart = this;
-	                        counter = 0;
-	                        return function() {
+	                    chart = this;
+	                    counter = 0;
+	                    return function() {
+				for(series in Highcharts.charts[0].series){
 	                    	    if(enableChart){
 		                        var x = (new Date()).getTime(), //current time
 		                            y = player.money;
@@ -38,9 +38,9 @@ $(function() {
 		                    else {
 		                    	series.setData([]); //wipes series if chart off
 		                    }
-		                    chartTimeout = setTimeout(arguments.callee, player.chartDelay);
 				}
-	                    };
+		                chartTimeout = setTimeout(arguments.callee, player.chartDelay);
+			    }
 	                })();
 	                chartTimeout = setTimeout(chartTimeoutRunner, player.chartDelay);
                 }
