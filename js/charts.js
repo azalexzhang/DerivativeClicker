@@ -24,11 +24,11 @@ $(function() {
                 load: function() {
                     // set up the updating of the chart each ten seconds
                     chartTimeoutRunner = (function(){
-                    	var series = Highcharts.charts[0].series[0];
-	                    chart = this;
-	                    counter = 0;
-	                    return function() {
-	                    	if(enableChart){
+			for(series in Highcharts.charts[0].series){
+	                        chart = this;
+	                        counter = 0;
+	                        return function() {
+	                    	    if(enableChart){
 		                        var x = (new Date()).getTime(), //current time
 		                            y = player.money;
 		                        //shifts if series length is longer than player set length
@@ -39,6 +39,7 @@ $(function() {
 		                    	series.setData([]); //wipes series if chart off
 		                    }
 		                    chartTimeout = setTimeout(arguments.callee, player.chartDelay);
+				}
 	                    };
 	                })();
 	                chartTimeout = setTimeout(chartTimeoutRunner, player.chartDelay);
@@ -116,6 +117,7 @@ $(function() {
 	$("#submitChartSettings").click(function(){
 		var newDelay = parseInt($("#chartPointDelay").val());
 		var newLength = parseInt($("#chartNumPoints").val());
+		var newSeries = parseInt($("#chartSeriesSelect").val());
 		
 		if(newDelay >= 500){
 			player.chartDelay = newDelay;
@@ -125,10 +127,20 @@ $(function() {
 		else alert("Delay between points must be at least 500 ms.");
 		
 		if(newLength >= 1 && newLength <= 10000) {
-			while(Highcharts.charts[0].series[0].points.length > newLength) Highcharts.charts[0].series[0].points[0].remove(false);
+			for(series in Highcharts.charts[0].series){
+				while(series.points.length > newLength) series.points[0].remove(false);
+			}
 			Highcharts.charts[0].redraw();
 			player.chartLength = newLength;
 		}
 		else alert("Number of points must be between 1 and 10000.")
+
+		for(var i = 0; i < Highcharts.charts[0].series.length; i++){
+			if(i == newSeries){
+				Highcharts.charts[0].series[i].show();
+			} else {
+				Highcharts.charts[0].series[i].hide();
+			}
+		}
 	});
 });
